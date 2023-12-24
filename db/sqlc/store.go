@@ -20,13 +20,10 @@ func NewStore(db *sql.DB) *Store {
 }
 
 func (store *Store) execTx(ctx context.Context, fn func(*Queries) error) error {
-	//	fmt.Println("Enter execTx function")
 	tx, err := store.db.BeginTx(ctx, nil)
 	if err != nil {
-		//		fmt.Println("Create Tx object fails")
 		return err
 	}
-	//	fmt.Println("Create Tx object successfully")
 
 	q := New(tx)
 	err = fn(q)
@@ -56,10 +53,10 @@ type TransferTxResult struct {
 
 func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
 	var result TransferTxResult
-	//	fmt.Println("Execute transaction in store.go")
+
 	err := store.execTx(ctx, func(q *Queries) error {
 		var err error
-		//		fmt.Println("Execute CreateTransfer in store.go")
+
 		result.Transfer, err = q.CreateTransfer(ctx, CreateTransferParams{
 			FromAccountID: arg.FromAccountID,
 			ToAccountID:   arg.ToAccountID,
@@ -68,7 +65,6 @@ func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (Trans
 		if err != nil {
 			return err
 		}
-		//		fmt.Println("Execute create Transfer successfully")
 
 		result.FromEntry, err = q.CreateEntry(ctx, CreateEntryParams{
 			AccountID: arg.FromAccountID,
@@ -77,7 +73,6 @@ func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (Trans
 		if err != nil {
 			return err
 		}
-		//		fmt.Println("Execute create fromEntry successfully")
 
 		result.ToEntry, err = q.CreateEntry(ctx, CreateEntryParams{
 			AccountID: arg.ToAccountID,
@@ -86,7 +81,6 @@ func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (Trans
 		if err != nil {
 			return err
 		}
-		//		fmt.Println("Execute create toEntry successfully")
 
 		return nil
 	})
