@@ -37,7 +37,7 @@ jobs:
       id: go
 
     - name: Check out code into the Go module directory
-      run: actions/checkout@v4
+      use: actions/checkout@v4
 
     - name: Test
       run: make test
