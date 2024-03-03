@@ -9,7 +9,7 @@ import (
 	"github.com/simple_bank/util"
 )
 
-// Server serves HTTP requests for our banking service.
+// Server serves gRPC requests for our banking service.
 type Server struct {
 	pb.UnimplementedSimpleBankServer
 	config     util.Config
